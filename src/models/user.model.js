@@ -36,13 +36,30 @@ User.getUser = (id, result) => {
     });
 }
 
+User.getUserByIdentifier = (identifier, result) => {
+    dbConn.query('SELECT * FROM users WHERE identifier = ?', [identifier], (err, res) => {
+        if (err) {
+            console.log('error: ', err);
+            result(null, err);
+            return;
+        }
+        if (res.length) {
+            console.log('user: ', res[0]);
+            result(null, res[0]);
+            return;
+        }
+        result({kind: 'not_found'}, null);
+    });
+}
+
 User.createUser = (newUser, result) => {
-    dbConn.query('INSERT INTO users (identifier, email, username, discriminator, avatar) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE email = ?, username = ?, discriminator = ?, avatar = ?', [
+    dbConn.query('INSERT INTO users (identifier, email, username, discriminator, avatar, roles) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE email = ?, username = ?, discriminator = ?, avatar = ?', [
         newUser.identifier,
         newUser.email,
         newUser.username,
         newUser.discriminator,
         newUser.avatar,
+        newUser.roles,
         newUser.email,
         newUser.username,
         newUser.discriminator,
@@ -59,11 +76,12 @@ User.createUser = (newUser, result) => {
 }
 
 User.updateUser = (id, user, result) => {
-    dbConn.query('UPDATE users SET email = ?, username = ?, discriminator = ?, avatar = ? WHERE id = ?', [
+    dbConn.query('UPDATE users SET email = ?, username = ?, discriminator = ?, avatar = ?, roles = ? WHERE id = ?', [
         user.email,
         user.username,
         user.discriminator,
         user.avatar,
+        user.roles,
         id
     ], (err, res) => {
         if (err) {

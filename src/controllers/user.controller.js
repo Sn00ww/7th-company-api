@@ -32,11 +32,13 @@ exports.getUser = (req, res) => {
                     message: "Error retrieving user with id " + req.params.id
                 });
             }
-        } else res.send({
-            success: true,
-            code: 200,
-            data: data
-        });
+        } else {
+            res.send({
+                success: true,
+                code: 200,
+                data: data
+            });
+        }
     });
 }
 
@@ -55,6 +57,7 @@ exports.createUser = (req, res) => {
         username:       req.body.username,
         discriminator:  req.body.discriminator,
         avatar:         req.body.avatar,
+        roles:          JSON.stringify(["ROLE_USER"])
     };
 
     User.createUser(user, (err, data) => {
@@ -86,6 +89,7 @@ exports.updateUser = (req, res) => {
         username:       req.body.username,
         discriminator:  req.body.discriminator,
         avatar:         req.body.avatar,
+        roles:          req.body.roles
     };
 
     User.updateUser(req.params.id, user, (err, data) => {
