@@ -1,4 +1,5 @@
 const User = require('../models/user.model');
+const axios = require("axios");
 
 exports.getUsers = (req, res) => {
     User.getUsers((err, data) => {
@@ -39,6 +40,44 @@ exports.getUser = (req, res) => {
                 data: data
             });
         }
+    });
+}
+
+exports.getUserByToken = (req, res) => {
+    const token = req.params.token;
+    const url = `https://discordapp.com/api/users/@me`;
+    const headers = {
+        Authorization: `Bearer ${token}`
+    };
+
+    axios.get(url, {headers}).then(response => {
+        const user = response.data;
+
+        User.getUserByToken(user, (err, data) => {
+            if (err) {
+                if (err.kind === 'not_found') {
+                    res.status(404).send({
+                        success: false,
+                        code: 404,
+                        message: `User not found.`,
+                    });
+                } else {
+                    res.status(500).send({
+                        success: false,
+                        code: 500,
+                        message: "Error retrieving user with id " + req.params.id
+                    });
+                }
+            } else {
+                res.send({
+                    success: true,
+                    code: 200,
+                    data: data
+                });
+            }
+        });
+    }).catch(err => {
+        console.log(err);
     });
 }
 

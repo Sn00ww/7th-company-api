@@ -12,7 +12,6 @@ exports.redirect = (req, res) => {
 
 exports.authorize = async (req, res) => {
     const code = req.query.code;
-    console.log(code);
     const url = `https://discordapp.com/api/oauth2/token`;
     const body = new URLSearchParams();
 
@@ -28,6 +27,7 @@ exports.authorize = async (req, res) => {
         const headers = {
             Authorization: `Bearer ${token}`
         };
+
         axios.get(url, {headers}).then(response => {
             const user = response.data;
             const body = new URLSearchParams();
@@ -43,7 +43,7 @@ exports.authorize = async (req, res) => {
 
             axios.post(`${process.env.API_URL}:${process.env.API_PORT}/api/v1/users/`, body, {headers}).then((response) => {
                 res.send({
-                    status: 'success',
+                    success: true,
                     code: 200,
                     data: {
                         token: token

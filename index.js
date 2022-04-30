@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1/users', userRoutes);
-app.use('/api/v1/discord/', discordRoutes);
+app.use('/api/v1/discord', discordRoutes);
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);

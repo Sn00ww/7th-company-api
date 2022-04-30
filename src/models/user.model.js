@@ -52,6 +52,23 @@ User.getUserByIdentifier = (identifier, result) => {
     });
 }
 
+User.getUserByToken = (user, result) => {
+    console.log(user);
+    dbConn.query('SELECT * FROM users WHERE identifier = ?', [user.id], (err, res) => {
+        if (err) {
+            console.log('error: ', err);
+            result(null, err);
+            return;
+        }
+        if (res.length) {
+            console.log('user: ', res[0]);
+            result(null, res[0]);
+            return;
+        }
+        result({kind: 'not_found'}, null);
+    });
+}
+
 User.createUser = (newUser, result) => {
     dbConn.query('INSERT INTO users (identifier, email, username, discriminator, avatar, roles) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE email = ?, username = ?, discriminator = ?, avatar = ?', [
         newUser.identifier,
