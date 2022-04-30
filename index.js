@@ -11,6 +11,7 @@ const port = process.env.API_PORT;
 // Load routes
 const userRoutes = require('./src/routes/user.route');
 const discordRoutes = require('./src/routes/discord.route');
+const formationRoutes = require('./src/routes/formation.route');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/discord', discordRoutes);
+app.use('/api/v1/formations', formationRoutes);
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
