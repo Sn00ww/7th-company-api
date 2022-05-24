@@ -13,6 +13,19 @@ This project is a dashboard to manage player registrations for a game called "Ar
 
 I used NodeJS and Express following a tutorial to have a good file architecture.
 
+## Install
+
+```sh
+git clone https://github.com/Sn00ww/7th-company-api
+```
+
+## Usage
+
+```sh
+npm i
+node index.js
+```
+
 ## Author
 
 👤 **Sn0w**
